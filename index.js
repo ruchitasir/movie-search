@@ -3,6 +3,7 @@ require('dotenv').config()
 let fetch = require('node-fetch')
 // Require needed modules
 let express = require('express')
+let db = require('./models')
 
 // Declare a new Express app
 let app = express()
@@ -34,8 +35,29 @@ app.get('/search',(req,res)=>{
         res.send('An error')
     })
 })
+app.get('/faves',(req,res)=>{
+    db.movie.findAll()
+    .then(movies=>{
+        res.render('faves',{movies})
+    })
+    .catch(err=>{
+        console.log('Error',err)
+        res.send('Uh Oh')
+    })
+    
+})
+
 app.post('/faves',(req,res)=>{
-    res.send(req.body)
+     db.movie.create(req.body)
+     .then(newMovie=>{
+         console.log('success')
+         res.redirect('/faves')
+     })
+     .catch(err=>{
+         console.log('Error',err)
+         res.send('Error - check logs!')
+
+     })
 })
 // Pick a port for it to listen on
 app.listen(3000, () => {
