@@ -8,6 +8,7 @@ let express = require('express')
 let app = express()
 // Set the template language to EJS
 app.set('view engine', 'ejs')
+app.use(express.urlencoded({extended: false}))
 // Declare routes
 app.get('/', (req, res) => {
     res.render('home')
@@ -23,13 +24,18 @@ app.get('/search',(req,res)=>{
     .then(data=>{
         console.log(data)
       //  res.render('results')
-        res.render('results',{results: data.Search, query:req.query.query, page:parseInt(page)})
+        res.render('results',{results: data.Search || [] , 
+            query:req.query.query, 
+            page:parseInt(page) || 0
+        })
     })
     .catch(err=>{
         console.log('An error',err)
         res.send('An error')
     })
-    //res.send('we got here')
+})
+app.post('/faves',(req,res)=>{
+    res.send(req.body)
 })
 // Pick a port for it to listen on
 app.listen(3000, () => {
