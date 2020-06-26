@@ -50,7 +50,7 @@ app.get('/faves',(req,res)=>{
 app.post('/faves',(req,res)=>{
      db.movie.create(req.body)
      .then(newMovie=>{
-         console.log('success')
+         console.log('success',newMovie)
          res.redirect('/faves')
      })
      .catch(err=>{
